@@ -1,0 +1,46 @@
+<div *ngIf="isAdmin" class="admin-container">
+
+  <div class="form-section">
+    <h2>{{ selectedRecipeId ? 'Edit Recipe' : 'Add a Dish' }}</h2>
+
+    <label for="recipeName">Name:</label>
+    <input id="recipeName" type="text" [(ngModel)]="recipeName" />
+
+    <label for="recipeIngredients">Ingredients (comma-separated):</label>
+    <textarea id="recipeIngredients" rows="3" [(ngModel)]="recipeIngredients"></textarea>
+
+    <label for="recipeInstructions">Instructions:</label>
+    <textarea id="recipeInstructions" rows="5" [(ngModel)]="recipeInstructions"></textarea>
+
+    <label for="prepTime">Preparation Time (minutes):</label>
+    <input id="prepTime" type="number" [(ngModel)]="prepTimeMinutes" />
+
+    <label for="cookTime">Cook Time (minutes):</label>
+    <input id="cookTime" type="number" [(ngModel)]="cookTimeMinutes" />
+
+    <label for="difficulty">Difficulty:</label>
+    <input id="difficulty" type="text" [(ngModel)]="difficulty" />
+
+    <label for="servings">Servings:</label>
+    <input id="servings" type="number" [(ngModel)]="servings" />
+    <button (click)="saveRecipe()">
+      {{ selectedRecipeId ? 'Save Changes' : 'Add Recipe' }}
+    </button>
+    <button *ngIf="selectedRecipeId" (click)="deleteRecipe()">Delete</button>
+    <button *ngIf="selectedRecipeId" (click)="clearForm()">Cancel</button>
+  </div>
+
+  <div class="list-section">
+    <h2>Existing Recipes</h2>
+
+    <ul>
+      <li *ngFor="let recipe of recipes" (click)="selectRecipe(recipe)">
+        {{ recipe.name }}
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div *ngIf="!isAdmin" style="padding: 20px;">
+  <p>You must be an admin to view this page.</p>
+</div>

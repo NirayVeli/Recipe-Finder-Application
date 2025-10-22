@@ -1,0 +1,15 @@
+<div class="login-container">
+  <h2 *ngIf="!isRegisterMode">Login</h2>
+  <h2 *ngIf="isRegisterMode">Register</h2>
+
+  <input type="text" [(ngModel)]="username" placeholder="Username">
+  <input type="password" [(ngModel)]="password" placeholder="Password">
+
+  <div class="button-group">
+    <button *ngIf="!isRegisterMode" (click)="login()">Login</button>
+    <button *ngIf="isRegisterMode" (click)="register()">Register</button>
+    <button (click)="toggleMode()">
+      {{ isRegisterMode ? 'Back to Login' : 'Create Account' }}
+    </button>
+  </div>
+</div>

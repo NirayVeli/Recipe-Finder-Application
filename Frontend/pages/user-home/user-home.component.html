@@ -1,0 +1,70 @@
+<div class="user-home-container">
+  <div class="left-panel">
+    <h3>Enter Ingredients to Find Recipes</h3>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Ingredient name</mat-label>
+      <input type="text"
+             placeholder="Search for an ingredient"
+             aria-label="Ingredient name"
+             matInput
+             [formControl]="ingredientFormControl"
+             [matAutocomplete]="auto">
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+        <mat-option *ngFor="let option of filteredIngredients | async" [value]="option">
+          {{option}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <button (click)="addIngredient()"
+            [disabled]="!ingredientFormControl.value || (ingredientFormControl.value && ingredientFormControl.value.trim() === '')"
+            class="action-button">
+      Add Ingredient
+    </button>
+
+    <div class="selected-ingredients-list">
+      <span *ngFor="let ing of ingredients" class="ingredient-tag">
+        {{ ing }} <button (click)="removeIngredient(ing)" class="remove-ingredient-button">x</button>
+      </span>
+    </div>
+
+    <button (click)="searchRecipes()" [disabled]="ingredients.length === 0" class="action-button primary-button">
+      Search Recipes
+    </button>
+  </div>
+
+  <div class="right-panel">
+    <h3>Recipes</h3>
+
+    <div *ngIf="recipes.length > 0 && !selectedRecipe" class="recipe-list-section">
+      <ul class="recipe-list">
+        <li *ngFor="let recipe of recipes" (click)="showDetails(recipe)" class="recipe-item">
+          {{ recipe.name }}
+        </li>
+      </ul>
+    </div>
+
+    <div *ngIf="recipes.length === 0 && ingredients.length > 0 && !selectedRecipe" class="no-results-message">
+      No recipes found matching your ingredients. Try different combinations!
+    </div>
+
+    <div *ngIf="selectedRecipe" class="recipe-details-display">
+      <h4>{{ selectedRecipe.name }}</h4>
+      <p><strong>Instructions:</strong> {{ selectedRecipe.instructions }}</p>
+      <p><strong>Ingredients:</strong> {{ getIngredientsDisplay(selectedRecipe) }}</p>
+
+      <ng-container *ngIf="isLoggedIn">
+        <p><strong>Preparation Time:</strong> {{ selectedRecipe.prepTimeMinutes }} minutes</p>
+        <p><strong>Cook Time:</strong> {{ selectedRecipe.cookTimeMinutes }} minutes</p>
+        <p><strong>Difficulty:</strong> {{ selectedRecipe.difficulty }}</p>
+        <p><strong>Servings:</strong> {{ selectedRecipe.servings }}</p>
+      </ng-container>
+      <button (click)="selectedRecipe = null" class="back-button">Back to Results</button>
+    </div>
+
+    <div *ngIf="ingredients.length === 0 && recipes.length === 0 && !selectedRecipe" class="initial-message">
+      Enter ingredients on the left to find delicious recipes!
+    </div>
+  </div>
+</div>
